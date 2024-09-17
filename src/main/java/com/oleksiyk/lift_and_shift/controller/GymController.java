@@ -1,0 +1,26 @@
+package com.oleksiyk.lift_and_shift.controller;
+
+import com.oleksiyk.lift_and_shift.entity.Exercise;
+import com.oleksiyk.lift_and_shift.repository.ExerciseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+public class GymController {
+
+    private final ExerciseRepository exerciseRepository;
+
+    @Autowired
+    public GymController(ExerciseRepository exerciseRepository) {
+        this.exerciseRepository = exerciseRepository;
+    }
+
+    @GetMapping(value = "/exercise/{dayId}")
+    public List<Exercise> getExercisesByDay(@PathVariable Integer dayId) {
+        return exerciseRepository.findByDayId(dayId);
+    }
+}
