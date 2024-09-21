@@ -2,23 +2,19 @@ package com.oleksiyk.lift_and_shift.service;
 
 import com.oleksiyk.lift_and_shift.entity.User;
 import com.oleksiyk.lift_and_shift.repository.UserRepository;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import com.oleksiyk.lift_and_shift.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Service
 public class AuthService {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenProvider tokenProvider;
 
     public void registerUser(String email, String password) {
         userRepository.findByEmail(email).ifPresent(user -> {
@@ -39,16 +35,6 @@ public class AuthService {
         }
 
         // Generate JWT
-        return generateJwtToken(user);
-    }
-
-    private String generateJwtToken(User user) {
-        SecretKey key = Keys.hmacShaKeyFor("test66666666666666666666666666666".getBytes(StandardCharsets.UTF_8));
-        return Jwts.builder()
-                .subject(user.getEmail())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 86400000)) //1 day
-                .signWith(key)
-                .compact();
+        return tokenProvider.generateToken(email);
     }
 }
