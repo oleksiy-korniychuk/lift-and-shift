@@ -12,12 +12,8 @@ import java.util.List;
 @RestController
 public class GymController {
 
-    private final ExerciseRepository exerciseRepository;
-
     @Autowired
-    public GymController(ExerciseRepository exerciseRepository) {
-        this.exerciseRepository = exerciseRepository;
-    }
+    private ExerciseRepository exerciseRepository;
 
     @GetMapping(value = "/exercise/{dayId}")
     public List<Exercise> getExercisesByDay(@PathVariable Integer dayId) {
