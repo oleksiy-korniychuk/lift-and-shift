@@ -1,8 +1,10 @@
 package com.oleksiyk.lift_and_shift.controller;
 
+import com.oleksiyk.lift_and_shift.Utilities;
 import com.oleksiyk.lift_and_shift.model.AuthRequest;
 import com.oleksiyk.lift_and_shift.service.AuthService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,7 @@ public class AuthController {
     public String login(@RequestBody AuthRequest request, HttpServletResponse response) {
         String token = authService.loginUser(request.getEmail(), request.getPassword());
 
-        Cookie jwtCookie = new Cookie("token", token);
+        Cookie jwtCookie = new Cookie("las_token", token);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setSecure(false); //set to true when using https
         jwtCookie.setPath("/");
@@ -33,5 +35,16 @@ public class AuthController {
     public String register(@RequestBody AuthRequest request) {
         authService.registerUser(request.getEmail(), request.getPassword());
         return "Success!";
+    }
+
+    @GetMapping("/validate")
+    public boolean validateToken(HttpServletRequest request) {
+        Cookie jwtCookie = Utilities.getTokenCookie(request);
+
+        if(jwtCookie != null) {
+            String jwtToken = jwtCookie.getValue();
+            return authService.validateToken(jwtToken);
+        }
+        return false;
     }
 }

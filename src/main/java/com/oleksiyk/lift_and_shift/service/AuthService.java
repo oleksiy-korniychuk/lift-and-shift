@@ -37,4 +37,8 @@ public class AuthService {
         // Generate JWT
         return tokenProvider.generateToken(email);
     }
+
+    public boolean validateToken(String token) {
+        return tokenProvider.validateToken(token);
+    }
 }

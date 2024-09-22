@@ -1,7 +1,9 @@
 package com.oleksiyk.lift_and_shift.security;
 
+import com.oleksiyk.lift_and_shift.Utilities;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,8 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-// Execute Before Executing Spring Security Filters
-// Validate the JWT Token and Provides user details to Spring Security for Authentication
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -57,11 +57,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getTokenFromRequest(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
+        if(!StringUtils.hasText(bearerToken)) {
+            Cookie jwtCookie = Utilities.getTokenCookie(request);
+            bearerToken = jwtCookie != null ? jwtCookie.getValue() : null;
+        }
 
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
             return bearerToken.substring(7);
         }
 
-        return null;
+        return bearerToken;
     }
 }
