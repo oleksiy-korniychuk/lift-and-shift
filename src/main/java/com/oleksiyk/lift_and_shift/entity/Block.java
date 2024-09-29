@@ -3,18 +3,18 @@ package com.oleksiyk.lift_and_shift.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "day")
-public class Day {
+@Table(name = "block")
+public class Block {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "block_id")
-    private Block block;
+    @JoinColumn(name = "program_id")
+    private Program program;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "block_number")
+    private Integer blockNumber;
 
     @Column(name = "description")
     private String description;
@@ -23,20 +23,20 @@ public class Day {
         return id;
     }
 
-    public Block getBlock() {
-        return block;
+    public Program getProgram() {
+        return program;
     }
 
-    public void setBlock(Block block) {
-        this.block = block;
+    public void setProgramId(Program program) {
+        this.program = program;
     }
 
-    public String getName() {
-        return name;
+    public Integer getBlockNumber() {
+        return blockNumber;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBlockNumber(Integer blockNumber) {
+        this.blockNumber = blockNumber;
     }
 
     public String getDescription() {

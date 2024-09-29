@@ -9,8 +9,9 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "day_id")
-    private Integer dayId;
+    @ManyToOne
+    @JoinColumn(name = "day_id")
+    private Day day;
 
     @Column(name = "name")
     private String name;
@@ -31,12 +32,12 @@ public class Exercise {
         return id;
     }
 
-    public Integer getDayId() {
-        return dayId;
+    public Day getDay() {
+        return day;
     }
 
-    public void setDayId(Integer dayId) {
-        this.dayId = dayId;
+    public void setDay(Day day) {
+        this.day = day;
     }
 
     public String getName() {
