@@ -31,11 +31,11 @@ public class AuthController {
         return token;
     }
 
-    @PostMapping("/register")
-    public String register(@RequestBody AuthRequest request) {
-        authService.registerUser(request.getEmail(), request.getPassword());
-        return "Success!";
-    }
+//    @PostMapping("/register")
+//    public String register(@RequestBody AuthRequest request) {
+//        authService.registerUser(request.getEmail(), request.getPassword());
+//        return "Success!";
+//    }
 
     @GetMapping("/validate")
     public boolean validateToken(HttpServletRequest request) {
