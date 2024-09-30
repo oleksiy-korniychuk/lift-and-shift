@@ -1,17 +1,14 @@
 package com.oleksiyk.lift_and_shift.controller;
 
-import com.oleksiyk.lift_and_shift.entity.Block;
-import com.oleksiyk.lift_and_shift.entity.Day;
-import com.oleksiyk.lift_and_shift.entity.Exercise;
-import com.oleksiyk.lift_and_shift.entity.Program;
+import com.oleksiyk.lift_and_shift.entity.*;
+import com.oleksiyk.lift_and_shift.model.WorkoutSession;
 import com.oleksiyk.lift_and_shift.repository.BlockRepository;
 import com.oleksiyk.lift_and_shift.repository.DayRepository;
 import com.oleksiyk.lift_and_shift.repository.ExerciseRepository;
 import com.oleksiyk.lift_and_shift.repository.ProgramRepository;
+import com.oleksiyk.lift_and_shift.service.SaveSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +23,8 @@ public class GymController {
     private BlockRepository blockRepository;
     @Autowired
     private DayRepository dayRepository;
+    @Autowired
+    private SaveSessionService saveSessionService;
 
     @GetMapping(value = "/program")
     public List<Program> getProgramsByUserId(@RequestParam(name = "user_id") Integer userId) {
@@ -45,5 +44,11 @@ public class GymController {
     @GetMapping(value = "/exercise")
     public List<Exercise> getExercisesByDay(@RequestParam(name = "day_id") Integer dayId) {
         return exerciseRepository.findByDayId(dayId);
+    }
+
+    @PostMapping(value = "/session")
+    public String getExercisesByDay(@RequestBody WorkoutSession session) {
+        saveSessionService.saveSession(session);
+        return "Saved";
     }
 }
